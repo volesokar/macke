@@ -47,8 +47,8 @@ def getm3u8():
         "accept": "*/*",
         "accept-encoding": "gzip, deflate, br",
         "accept-language": "tr-TR, tr;q = 0.9",
-        "origin": "https://www.maltinok.com",
-        "referer": "https://www.maltinok.com/",
+        "origin": "https://1xlite-900665.top/zone-static/getZone/liveplayer/v2/vpc/index.html?id=5bdc1e3d-91fa-a25f-83dd-d33a54a20837",
+        "referer": "https://1xlite-900665.top/zone-static/getZone/liveplayer/v2/vpc/index.html?id=5bdc1e3d-91fa-a25f-83dd-d33a54a20837",
         'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Windows"',
@@ -74,8 +74,8 @@ def getstream():
             'accept': '*/*',
             'accept-encoding': 'gzip, deflate, br',
             'accept-language': 'tr-TR,tr;q=0.9',
-            'origin': 'https://www.maltinok.com',
-            'referer': 'https://www.maltinok.com/',
+            'origin': 'https://1xlite-900665.top/zone-static/getZone/liveplayer/v2/vpc/index.html?id=5bdc1e3d-91fa-a25f-83dd-d33a54a20837',
+            'referer': 'https://1xlite-900665.top/zone-static/getZone/liveplayer/v2/vpc/index.html?id=5bdc1e3d-91fa-a25f-83dd-d33a54a20837',
             'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
             'sec-ch-ua-mobile': '?0',
             'sec-ch-ua-platform': '"Windows"',
@@ -87,24 +87,28 @@ def getstream():
         ts = requests.get(source,headers=headers)
         return ts.content
    if param == "getm3u8":
-    videoid = request.args.get("videoid")
-    veriler = {"AppId": "3", "AppVer": "1025", "VpcVer": "1.0.12", "Language": "tr", "Token": "", "VideoId": videoid}
-    r = requests.post("https://1xlite-900665.top/cinema", json=veriler)
-
-    # JSON yanıtını al
-    response_json = r.json()
-
-    # FullscreenAllowed değeri true ise işlemleri yap
-    if response_json.get("FullscreenAllowed", False):
-        # PlayerPath değerini al
-        player_path = response_json.get("PlayerPath", "")
-
-        # PlayerPath'i kontrol et ve uygun URL'yi oluştur
-        if player_path:
-            veri = "https://sea-lion-app-mx8cy.ondigitalocean.app/" + player_path + '?videoid=' + videoid
-            return veri
-    else:
-        return "Veri yok"
+        videoid = request.args.get("videoid")
+        veriler = {"AppId": "3", "AppVer": "1025", "VpcVer": "1.0.12", "Language": "tr", "Token": "", "VideoId": videoid}
+        r = requests.post("https://1xlite-900665.top/cinema",json=veriler)
+        if "FullscreenAllowed" in r.text:
+            veri = r.text
+            veri = re.findall('"URL":"(.*?)"',veri)
+            veri = veri[0].replace("\/", "__")
+            veri = veri.replace('edge3','edge10')
+            veri = veri.replace('edge100','edge10')
+            veri = veri.replace('edge4','edge10')
+            veri = veri.replace('edge2','edge10')
+            veri = veri.replace('edge5','edge10')
+            veri = veri.replace('edge1','edge10')
+            veri = veri.replace('edge6', 'edge10')
+            veri = veri.replace('edge7', 'edge10')
+            veri = veri.replace(':43434','')
+            veri = veri.replace('edge100','edge10')
+            if "m3u8" in veri:
+                '''return "https://lobster-app-7tul5.ondigitalocean.app/getm3u8?source="+veri+'&videoid='+videoid'''
+                return "https://lobster-app-7tul5.ondigitalocean.app/"+veri+'&videoid='+videoid
+        else:
+            return "Veri yok"
 
 
 if __name__ == '__main__':

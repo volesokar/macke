@@ -43,11 +43,11 @@ def getm3u8():
     source = source.replace('https://sea-lion-app-mx8cy.ondigitalocean.app/getm3u8?source=', '')
     source = source.replace('%2F', '/')
     source = source.replace('%3F', '?')
-      headers = {
+    headers = {
             'accept': '*/*',
             'accept-encoding': 'gzip, deflate, br',
-            'accept-language': 'tr,en;q=0.9,en-GB;q=0.8,en-US;q=0.7',
-            'origin': 'https://www.voleapi.buzz/',
+            'accept-language': 'tr-TR,tr;q=0.9',
+            'origin': 'https://www.voleapi.buzz',
             'referer': 'https://www.voleapi.buzz/',
             'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
             'sec-ch-ua-mobile': '?0',
@@ -70,11 +70,11 @@ def getstream():
         source = source.replace('https://sea-lion-app-mx8cy.ondigitalocean.app/getstream?param=getts&source=','')
         source = source.replace('%2F','/')
         source = source.replace('%3F','?')
-        headers = {
+      headers = {
             'accept': '*/*',
             'accept-encoding': 'gzip, deflate, br',
-            'accept-language': 'tr,en;q=0.9,en-GB;q=0.8,en-US;q=0.7',
-            'origin': 'https://www.voleapi.buzz/',
+            'accept-language': 'tr-TR,tr;q=0.9',
+            'origin': 'https://www.voleapi.buzz',
             'referer': 'https://www.voleapi.buzz/',
             'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
             'sec-ch-ua-mobile': '?0',

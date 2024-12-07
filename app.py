@@ -14,19 +14,19 @@ def index(m3u8):
     source = source.replace('%3F', '?')
     videoid = request.args.get("videoid")
     '''source = source.replace(videoid+'.m3u8',videoid)'''
-    headers = {
+   headers = {
         "accept": "*/*",
         "accept-encoding": "gzip, deflate, br",
-        "accept-language": "tr-TR, tr;q = 0.9",
+        "accept-language": "tr,en;q=0.9,en-GB;q=0.8,en-US;q=0.7",
         "origin": "https://www.voleapi.buzz/",
         "referer": "https://www.voleapi.buzz/",
-        'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
+        'sec-ch-ua': '"Microsoft Edge";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Windows"',
         'sec-fetch-dest': 'empty',
         'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'cross-site',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+        'sec-fetch-site': 'same-origin',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0'
     }
     ts = requests.get(source, headers=headers)
     tsal = ts.text
@@ -46,16 +46,16 @@ def getm3u8():
     headers = {
         "accept": "*/*",
         "accept-encoding": "gzip, deflate, br",
-        "accept-language": "tr-TR, tr;q = 0.9",
+        "accept-language": "tr,en;q=0.9,en-GB;q=0.8,en-US;q=0.7",
         "origin": "https://www.voleapi.buzz/",
         "referer": "https://www.voleapi.buzz/",
-        'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
+        'sec-ch-ua': '"Microsoft Edge";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Windows"',
         'sec-fetch-dest': 'empty',
         'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'cross-site',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+        'sec-fetch-site': 'same-origin',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0'
     }
     ts = requests.get(source, headers=headers)
     tsal = ts.text
@@ -73,9 +73,9 @@ def getstream():
         headers = {
             'accept': '*/*',
             'accept-encoding': 'gzip, deflate, br',
-            'accept-language': 'tr-TR,tr;q=0.9',
-            'origin': 'https://1xlite-900665.top/zone-static/getZone/liveplayer/v2/vpc/index.html?id=5bdc1e3d-91fa-a25f-83dd-d33a54a20837',
-            'referer': 'https://1xlite-900665.top/zone-static/getZone/liveplayer/v2/vpc/index.html?id=5bdc1e3d-91fa-a25f-83dd-d33a54a20837',
+            'accept-language': 'tr,en;q=0.9,en-GB;q=0.8,en-US;q=0.7',
+            'origin': 'https://www.voleapi.buzz/',
+            'referer': 'https://www.voleapi.buzz/',
             'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
             'sec-ch-ua-mobile': '?0',
             'sec-ch-ua-platform': '"Windows"',
@@ -105,8 +105,8 @@ def getstream():
             veri = veri.replace(':43434','')
             veri = veri.replace('edge100','edge10')
             if "m3u8" in veri:
-                '''return "https://lobster-app-7tul5.ondigitalocean.app/getm3u8?source="+veri+'&videoid='+videoid'''
-                return "https://lobster-app-7tul5.ondigitalocean.app/"+veri+'&videoid='+videoid
+                '''return "https://sea-lion-app-mx8cy.ondigitalocean.app/getm3u8?source="+veri+'&videoid='+videoid'''
+                return "https://sea-lion-app-mx8cy.ondigitalocean.app/"+veri+'&videoid='+videoid
         else:
             return "Veri yok"
 

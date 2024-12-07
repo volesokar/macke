@@ -1,108 +1,111 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
 import requests
+from flask import Flask
+from flask import request
+from flask_cors import CORS
 import re
-import json
-
 app = Flask(__name__)
 CORS(app)
-
-# Genel HTTP isteği için ortak başlıklar
-HEADERS = {
-    "accept": "*/*",
-    "accept-encoding": "gzip, deflate, br",
-    "accept-language": "tr-TR,tr;q=0.9",
-    "origin": "https://1xlite-900665.top/",
-    "referer": "https://1xlite-900665.top/",
-    'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"Windows"',
-    'sec-fetch-dest': 'empty',
-    'sec-fetch-mode': 'cors',
-    'sec-fetch-site': 'cross-site',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
-}
-
-@app.route('/getm3u8', methods=['GET'])
-def get_m3u8():
-    """Hedef siteden .m3u8 dosyasını alır."""
-    source = request.args.get("source")
+@app.route('/<m3u8>')
+def index(m3u8):
+    m3u8 = request.url.replace('__','/')
+    source = m3u8
+    source = source.replace('https://sea-lion-app-mx8cy.ondigitalocean.app/', '')
+    source = source.replace('%2F', '/')
+    source = source.replace('%3F', '?')
     videoid = request.args.get("videoid")
-    
-    if not source:
-        return jsonify({"error": "Source parametresi eksik!"}), 400
-
-    # URL düzenleme işlemleri
-    source = source.replace('%2F', '/').replace('%3F', '?')
-    
-  try:
-        # Hedef siteye POST isteği
-        response = requests.post("https://1xlite-900665.top/cinema", json=payload, headers=HEADERS)
-        if response.status_code == 200:
-            data = response.json()
-            # Fullscreen izni kontrolü
-            if data.get("FullscreenAllowed"):
-                player_path = data.get("PlayerPath", "")
-                url = data.get("URL", "")
-
-                # Doğru URL'yi oluştur
-                full_url = f"https://1xlite-900665.top{player_path}?url={url}"
-                return jsonify({"full_url": full_url})
-            else:
-                return jsonify({"error": "Tam ekran izni verilmedi!"}), 403
-        else:
-            return jsonify({"error": f"API isteği başarısız: {response.status_code}"}), 500
-    except Exception as e:
-        return jsonify({"error": f"İşlem sırasında hata oluştu: {str(e)}"}), 500
-
-@app.route('/getstream', methods=['GET'])
-def get_stream():
-    """Hedef dosya akışını döndürür."""
-    param = request.args.get("param")
-    source = request.args.get("source")
-    
-    if param == "getts" and source:
-        source = source.replace('%2F', '/').replace('%3F', '?')
-        try:
-            # Akış isteği
-            response = requests.get(source, headers=HEADERS, stream=True)
-            return response.content, response.status_code, {'Content-Type': 'application/octet-stream'}
-        except Exception as e:
-            return jsonify({"error": f"Akış sırasında hata oluştu: {str(e)}"}), 500
-    else:
-        return jsonify({"error": "Geçersiz parametreler!"}), 400
-
-@app.route('/getvideo', methods=['POST'])
-def get_video():
-    """Hedef siteden video bilgisi alır ve uygun URL'yi döner."""
-    videoid = request.json.get("videoid")
-    
-    if not videoid:
-        return jsonify({"error": "Video ID eksik!"}), 400
-    
-    payload = {
-        "AppId": "3",
-        "AppVer": "1025",
-        "VpcVer": "1.0.12",
-        "Language": "tr",
-        "Token": "",
-        "VideoId": videoid
+    '''source = source.replace(videoid+'.m3u8',videoid)'''
+    headers = {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "tr-TR, tr;q = 0.9",
+        "origin": "https://www.maltinok.com",
+        "referer": "https://www.maltinok.com/",
+        'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'cross-site',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
     }
+    ts = requests.get(source, headers=headers)
+    tsal = ts.text
+    tsal = tsal.replace(videoid+'_','https://sea-lion-app-mx8cy.ondigitalocean.app/getstream?param=getts&source=https://edge10.xmediaget.com/hls-live/'+videoid+'/1/'+videoid+'_')
+    if "internal" in tsal:
+        tsal = tsal.replace('internal','https://sea-lion-app-mx8cy.ondigitalocean.app/getstream?param=getts&source=https://edge10.xmediaget.com/hls-live/'+videoid+'/1/internal')
+    if "segment" in tsal:
+        tsal = tsal.replace('\n'+'media','\n'+'https://sea-lion-app-mx8cy.ondigitalocean.app/getstream?param=getts&source=https://edge10.xmediaget.com/hls-live/'+videoid+'/1/media')
+    return tsal
 
-    try:
-        # Hedef siteye POST isteği
-        response = requests.post("https://1xlite-900665.top/cinema", json=payload, headers=HEADERS)
-        if response.status_code == 200:
-            data = response.json()
-            if data.get("FullscreenAllowed"):
-                url = data.get("URL", "").replace("\\/", "/")
-                return jsonify({"url": url})
-            else:
-                return jsonify({"error": "Erişim engellendi!"}), 403
-        else:
-            return jsonify({"error": f"API isteği başarısız: {response.status_code}"}), 500
-    except Exception as e:
-        return jsonify({"error": f"İşlem sırasında hata oluştu: {str(e)}"}), 500
+@app.route('/getm3u8',methods=['GET'])
+def getm3u8():
+    source = request.url
+    source = source.replace('https://sea-lion-app-mx8cy.ondigitalocean.app/getm3u8?source=', '')
+    source = source.replace('%2F', '/')
+    source = source.replace('%3F', '?')
+    headers = {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "tr-TR, tr;q = 0.9",
+        "origin": "https://www.maltinok.com",
+        "referer": "https://www.maltinok.com/",
+        'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'cross-site',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+    }
+    ts = requests.get(source, headers=headers)
+    tsal = ts.text
+    tsal = tsal.replace(videoid+'_','https://sea-lion-app-mx8cy.ondigitalocean.app/getstream?param=getts&source=https://edge10.xmediaget.com/hls-live/'+videoid+'/1/'+videoid+'_')
+    return tsal
+
+@app.route('/getstream',methods=['GET'])
+def getstream():
+    param = request.args.get("param")
+    if param == "getts":
+        source = request.url
+        source = source.replace('https://sea-lion-app-mx8cy.ondigitalocean.app/getstream?param=getts&source=','')
+        source = source.replace('%2F','/')
+        source = source.replace('%3F','?')
+        headers = {
+            'accept': '*/*',
+            'accept-encoding': 'gzip, deflate, br',
+            'accept-language': 'tr-TR,tr;q=0.9',
+            'origin': 'https://www.maltinok.com',
+            'referer': 'https://www.maltinok.com/',
+            'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'cross-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+        }
+        ts = requests.get(source,headers=headers)
+        return ts.content
+   if param == "getm3u8":
+    videoid = request.args.get("videoid")
+    veriler = {"AppId": "3", "AppVer": "1025", "VpcVer": "1.0.12", "Language": "tr", "Token": "", "VideoId": videoid}
+    r = requests.post("https://1xlite-900665.top/cinema", json=veriler)
+
+    # JSON yanıtını al
+    response_json = r.json()
+
+    # FullscreenAllowed değeri true ise işlemleri yap
+    if response_json.get("FullscreenAllowed", False):
+        # PlayerPath değerini al
+        player_path = response_json.get("PlayerPath", "")
+
+        # PlayerPath'i kontrol et ve uygun URL'yi oluştur
+        if player_path:
+            veri = "https://sea-lion-app-mx8cy.ondigitalocean.app/" + player_path + '?videoid=' + videoid
+            return veri
+    else:
+        return "Veri yok"
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

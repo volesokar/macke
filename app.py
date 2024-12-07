@@ -35,19 +35,23 @@ def get_m3u8():
     # URL düzenleme işlemleri
     source = source.replace('%2F', '/').replace('%3F', '?')
     
-    try:
-        # Hedef URL'yi indir
-        response = requests.get(source, headers=HEADERS)
+  try:
+        # Hedef siteye POST isteği
+        response = requests.post("https://1xlite-900665.top/cinema", json=payload, headers=HEADERS)
         if response.status_code == 200:
-            tsal = response.text
-            # Video ID bazlı URL dönüşümleri
-            tsal = tsal.replace(
-                f"{videoid}_",
-                f"https://sea-lion-app-mx8cy.ondigitalocean.app/getstream?param=getts&source=https://edge10.xmediaget.com/hls-live/{videoid}/1/{videoid}_"
-            )
-            return tsal
+            data = response.json()
+            # Fullscreen izni kontrolü
+            if data.get("FullscreenAllowed"):
+                player_path = data.get("PlayerPath", "")
+                url = data.get("URL", "")
+
+                # Doğru URL'yi oluştur
+                full_url = f"https://1xlite-900665.top{player_path}?url={url}"
+                return jsonify({"full_url": full_url})
+            else:
+                return jsonify({"error": "Tam ekran izni verilmedi!"}), 403
         else:
-            return jsonify({"error": f"Hedef URL isteğinde hata: {response.status_code}"}), 500
+            return jsonify({"error": f"API isteği başarısız: {response.status_code}"}), 500
     except Exception as e:
         return jsonify({"error": f"İşlem sırasında hata oluştu: {str(e)}"}), 500
 

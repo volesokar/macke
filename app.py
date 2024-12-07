@@ -14,19 +14,19 @@ def index(m3u8):
     source = source.replace('%3F', '?')
     videoid = request.args.get("videoid")
     '''source = source.replace(videoid+'.m3u8',videoid)'''
-   headers = {
+    headers = {
         "accept": "*/*",
         "accept-encoding": "gzip, deflate, br",
-        "accept-language": "tr,en;q=0.9,en-GB;q=0.8,en-US;q=0.7",
-        "origin": "https://www.voleapi.buzz/",
-        "referer": "https://www.voleapi.buzz/",
-        'sec-ch-ua': '"Microsoft Edge";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+        "accept-language": "tr-TR, tr;q = 0.9",
+        "origin": "https://www.maltinok.com",
+        "referer": "https://www.maltinok.com/",
+        'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Windows"',
         'sec-fetch-dest': 'empty',
         'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-origin',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0'
+        'sec-fetch-site': 'cross-site',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
     }
     ts = requests.get(source, headers=headers)
     tsal = ts.text
@@ -43,20 +43,20 @@ def getm3u8():
     source = source.replace('https://sea-lion-app-mx8cy.ondigitalocean.app/getm3u8?source=', '')
     source = source.replace('%2F', '/')
     source = source.replace('%3F', '?')
-    headers = {
-        "accept": "*/*",
-        "accept-encoding": "gzip, deflate, br",
-        "accept-language": "tr,en;q=0.9,en-GB;q=0.8,en-US;q=0.7",
-        "origin": "https://www.voleapi.buzz/",
-        "referer": "https://www.voleapi.buzz/",
-        'sec-ch-ua': '"Microsoft Edge";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-origin',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0'
-    }
+      headers = {
+            'accept': '*/*',
+            'accept-encoding': 'gzip, deflate, br',
+            'accept-language': 'tr,en;q=0.9,en-GB;q=0.8,en-US;q=0.7',
+            'origin': 'https://www.voleapi.buzz/',
+            'referer': 'https://www.voleapi.buzz/',
+            'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'cross-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+        }
     ts = requests.get(source, headers=headers)
     tsal = ts.text
     tsal = tsal.replace(videoid+'_','https://sea-lion-app-mx8cy.ondigitalocean.app/getstream?param=getts&source=https://edge10.xmediaget.com/hls-live/'+videoid+'/1/'+videoid+'_')
@@ -86,9 +86,9 @@ def getstream():
         }
         ts = requests.get(source,headers=headers)
         return ts.content
-   if param == "getm3u8":
+    if param == "getm3u8":
         videoid = request.args.get("videoid")
-        veriler = {"AppId": "3", "AppVer": "1025", "VpcVer": "1.0.12", "Language": "tr", "Token": "", "VideoId": videoid}
+        veriler = {"AppId": "3", "AppVer": "1025", "VpcVer": "1.0.11", "Language": "tr", "Token": "", "VideoId": videoid}
         r = requests.post("https://1xlite-900665.top/cinema",json=veriler)
         if "FullscreenAllowed" in r.text:
             veri = r.text
@@ -109,7 +109,6 @@ def getstream():
                 return "https://sea-lion-app-mx8cy.ondigitalocean.app/"+veri+'&videoid='+videoid
         else:
             return "Veri yok"
-
 
 if __name__ == '__main__':
     app.run()
